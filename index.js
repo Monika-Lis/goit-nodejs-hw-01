@@ -44,7 +44,7 @@ program
   .option("-a, --action <type>", "choose action")
   .option("-i, --id <type>", "user id")
   .option("-n, --name <type>", "user name")
-  .option("-e, --enamil <type", "user email")
+  .option("-e, --email <type", "user email")
   .option("-p, --phone <type", "user phone");
 
 program.parse(process.argv);
@@ -62,10 +62,12 @@ async function invokeAction({ action, id, name, email, phone }) {
 
     case "add":
       console.log(await addContact(name, email, phone));
+      console.table(await listContacts());
       break;
 
     case "remove":
       console.log(await removeContact(id));
+      console.table(await listContacts());
       break;
 
     default:

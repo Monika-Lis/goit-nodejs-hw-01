@@ -24,17 +24,24 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
+    const contactToRemove = contacts.find(
+      (contact) => contact.id === contactId
+    );
+    if (!contactToRemove) {
+      console.log("Contact not found");
+      return;
+    }
     const filteredContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
     await fs.writeFile(contactsPath, JSON.stringify(filteredContacts, null, 2));
-    return filteredContacts;
+    return { removed: contactToRemove };
   } catch (error) {
-    console.error("Error removing contact", error);
+    console.error("Error removing contact:", error);
   }
 }
 
-async function addContact(name, emial, phone) {
+async function addContact(name, email, phone) {
   try {
     const contacts = await listContacts();
     const newContact = { id: Date.now().toString(), name, email, phone };
